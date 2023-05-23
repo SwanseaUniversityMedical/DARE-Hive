@@ -1,0 +1,10 @@
+trino:
+  enabled: true
+
+  image:
+    repository: harbor.ukserp.ac.uk/dare/hive
+    tag: 1.0.0
+    pullPolicy: IfNotPresent
+    pullSecret: ""
+    uid: 1001
+    gid: 1001
