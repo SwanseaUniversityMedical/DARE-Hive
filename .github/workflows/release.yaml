@@ -36,15 +36,15 @@ jobs:
               - '.github/workflows/release.yaml'
               - 'containers/hive/**'
 
-      - name: build container
-        if: steps.container-changes.outputs.src == 'true'
-        run: |
-          docker build -t image -f "containers/hive/Dockerfile" .
-
       - name: registry login
         if: steps.container-changes.outputs.src == 'true'
         run: |
           echo "$HARBOR_TOKEN" | docker login $HARBOR_REGISTRY -u $HARBOR_USER --password-stdin
+
+      - name: build container
+        if: steps.container-changes.outputs.src == 'true'
+        run: |
+          docker build -t image -f "containers/hive/Dockerfile" .
 
       - name: generate token
         if: steps.container-changes.outputs.src == 'true'
