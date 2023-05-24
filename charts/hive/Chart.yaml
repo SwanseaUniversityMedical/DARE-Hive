@@ -4,7 +4,7 @@ dependencies:
 - condition: postgresql-ha.enabled
   name: postgresql-ha
   repository: https://charts.bitnami.com/bitnami
-  version: ~11.1.x
+  version: ~11.7.0
 description: The Apache Hive ™ is a data warehouse software project built on top of
   Apache Hadoop for providing data query and analysis. Hive gives an SQL-like interface
   to query data stored in various databases and file systems that integrate with Hadoop.
