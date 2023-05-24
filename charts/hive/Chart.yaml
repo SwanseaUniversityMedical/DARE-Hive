@@ -1,6 +1,18 @@
 apiVersion: v2
-appVersion: 1.0.0
-description: Helm chart for deploying DARE Hive Metastore.
-name: hive
-type: application
+appVersion: 1.0.4
+
+dependencies:
+- name: postgresql-ha
+  condition: postgresql-ha.enabled
+  repository: https://charts.bitnami.com/bitnami
+  version: ~11.1.x
+
+description: The Apache Hive ™ is a data warehouse software project built on top of
+  Apache Hadoop for providing data query and analysis. Hive gives an SQL-like interface
+  to query data stored in various databases and file systems that integrate with Hadoop.
+home: https://hive.apache.org/
+icon: https://hive.apache.org/images/hive_logo_medium.jpg
+name: hive-metastore
+sources:
+- https://github.com/apache/hive
 version: 1.0.0

@@ -1,10 +1,66 @@
-trino:
-  enabled: true
+## Number of Hive Metastore instances.
+## Following the documentation, given Hive Metastore is stateless we could have more than one instance.
+## https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+Administration
+replicaCount: 1
 
-  image:
-    repository: harbor.ukserp.ac.uk/dare/hive
-    tag: 1.0.0
-    pullPolicy: IfNotPresent
-    pullSecret: ""
-    uid: 1001
-    gid: 1001
+## Default Hive image and tag. Please build image locally before applying this.
+image:
+  name: alleeex/hive-metastore
+  tag: 3.1.3
+  pullPolicy: IfNotPresent
+
+## Resource requests and limits: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+resources:
+  limits:
+    cpu: 2
+    memory: 4Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+  # Annotations to add to the service account
+  annotations: {}
+
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+
+service:
+  type: ClusterIP
+  port: 9083
+
+## Auto-scaling (hpa) configuration
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 90
+  targetMemoryUtilizationPercentage: 90
+
+
+affinity: {}
+topologySpreadConstraints: []
+
+postgresql-ha:
+  enabled: true
+  postgresql:
+    replicaCount: 1
+    username: postgres
+    password: j^i@PGy%3%8306
+    database: metastore_db
+    repmgrUsername: repmgr
+    repmgrPassword: DpJCSdv3DY
+    repmgrDatabase: repmgr
+
+
+minio:
+  accessKey: console
+  secretKey: console123
+  endpoint: http://minio
+
