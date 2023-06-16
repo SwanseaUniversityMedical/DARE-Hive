@@ -34,13 +34,12 @@ spec:
           image: "{{.Values.image.name}}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: METASTORE_DB_HOSTNAME
-              # have to use the 'index' method due to this bug https://github.com/helm/helm/issues/2192
-              {{- if index .Values "postgresql-ha.overrideAddress" }}
-              value: {{ index .Values "postgresql-ha.overrideAddress" }}
-              {{- else }}
-              value: {{ .Release.Name }}-postgresql-ha-pgpool
-              {{- end }}
+            - name: SERVICE_NAME
+              value: metastore
+            - name: DB_DRIVER
+              value: postgres
+            - name: HIVE_CUSTOM_CONF_DIR
+              value: /opt/hive/conf/
           ports:
             - name: tcp
               containerPort: 9083
@@ -49,7 +48,7 @@ spec:
             {{- toYaml .Values.resources | trim  | nindent 12 }}
           volumeMounts:
           - name: hive-conf-templates
-            mountPath: /opt/apache-hive-metastore-3.1.3-bin/conf/metastore-site.xml
+            mountPath: /opt/hive/conf/metastore-site.xml
             subPath: metastore-site.xml
       volumes:
       - name: hive-conf-templates

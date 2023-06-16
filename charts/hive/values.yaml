@@ -5,7 +5,9 @@ replicaCount: 1
 
 ## Default Hive image and tag. Please build image locally before applying this.
 image:
-  name: alleeex/hive-metastore
+  # name: harbor.ukserp.ac.uk/dare/hive
+  # tag: 1.2.0
+  name: apache/hive
   tag: 3.1.3
   pullPolicy: IfNotPresent
 
