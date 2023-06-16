@@ -46,8 +46,8 @@ spec:
             {{- toYaml .Values.resources | trim  | nindent 12 }}
           volumeMounts:
           - name: hive-conf-templates
-            mountPath: /opt/hive/conf/metastore-site.xml
-            subPath: metastore-site.xml
+            mountPath: /opt/hive/conf/hivemetastore-site.xml
+            subPath: hivemetastore-site.xml
       volumes:
       - name: hive-conf-templates
         configMap:

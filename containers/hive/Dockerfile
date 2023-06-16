@@ -5,6 +5,6 @@ LABEL org.opencontainers.image.source=https://github.com/SwanseaUniversityMedica
 ENV SERVICE_NAME=metastore
 ENV DB_DRIVER=postgres
 
-COPY entrypoint.sh /
+COPY --chmod=755 entrypoint.sh /
 
-ENTRYPOINT ["sh" "-c" "/entrypoint.sh"]
+ENTRYPOINT ["sh", "-c", "/entrypoint.sh"]
