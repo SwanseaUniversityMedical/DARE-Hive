@@ -1,56 +1,17 @@
-#!/bin/bash
+#!/bin/sh
 
-#
-# Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
-# this work for additional information regarding copyright ownership.
-# The ASF licenses this file to You under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+export HADOOP_HOME=/opt/hadoop-${HADOOP_VERSION}
+export HADOOP_CLASSPATH=${HADOOP_HOME}/share/hadoop/tools/lib/aws-java-sdk-bundle-1.12.262.jar:${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-aws-${HADOOP_VERSION}.jar
+export METASTORE_DB_HOSTNAME=${METASTORE_DB_HOSTNAME:-localhost}
 
-set -x
+echo "Waiting for database on ${METASTORE_DB_HOSTNAME} to launch on 5432 ..."
 
-: ${DB_DRIVER:=derby}
+while ! nc -z ${METASTORE_DB_HOSTNAME} 5432; do
+  sleep 1
+done
 
-SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
+echo "Database on ${METASTORE_DB_HOSTNAME}:5432 started"
+echo "Init apache hive metastore on ${METASTORE_DB_HOSTNAME}:5432"
 
-function initialize_hive {
-  $HIVE_HOME/bin/schematool -dbType $DB_DRIVER -initSchema
-  if [ $? -eq 0 ]; then
-    echo "Initialized schema successfully.."
-  else
-    echo "Schema initialization failed!"
-    exit 1
-  fi
-}
-
-export HIVE_CONF_DIR=$HIVE_HOME/conf
-if [ -d "${HIVE_CUSTOM_CONF_DIR:-}" ]; then
-  find "${HIVE_CUSTOM_CONF_DIR}" -type f -exec \
-    ln -sfn {} "${HIVE_CONF_DIR}"/ \;
-  export HADOOP_CONF_DIR=$HIVE_CONF_DIR
-  export TEZ_CONF_DIR=$HIVE_CONF_DIR
-fi
-
-export HADOOP_CLIENT_OPTS="$HADOOP_CLIENT_OPTS -Xmx1G $SERVICE_OPTS"
-if [[ "${SKIP_SCHEMA_INIT}" == "false" ]]; then
-  # handles schema initialization
-  initialize_hive
-fi
-
-if [ "${SERVICE_NAME}" == "hiveserver2" ]; then
-  export HADOOP_CLASSPATH=$TEZ_HOME/*:$TEZ_HOME/lib/*:$HADOOP_CLASSPATH
-elif [ "${SERVICE_NAME}" == "metastore" ]; then
-  export METASTORE_PORT=${METASTORE_PORT:-9083}
-fi
-
-exec $HIVE_HOME/bin/hive --skiphadoopversion --skiphbasecp --service $SERVICE_NAME
+/opt/apache-hive-metastore-3.1.3-bin/bin/schematool -initSchema -dbType postgres
+/opt/apache-hive-metastore-3.1.3-bin/bin/start-metastore

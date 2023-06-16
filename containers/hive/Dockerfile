@@ -1,10 +1,28 @@
-FROM apache/hive:3.1.3
+FROM amazoncorretto:8u362-alpine3.17-jre
 
-LABEL org.opencontainers.image.source=https://github.com/SwanseaUniversityMedical/DARE-Hive
+WORKDIR /opt
 
-ENV SERVICE_NAME=metastore
-ENV DB_DRIVER=postgres
+ENV HADOOP_VERSION=3.3.4
+ENV METASTORE_VERSION=3.1.3
 
-COPY --chmod=755 entrypoint.sh /
+ENV HADOOP_HOME=/opt/hadoop-${HADOOP_VERSION}
+ENV HIVE_HOME=/opt/apache-hive-metastore-${METASTORE_VERSION}-bin
+
+RUN apk update && apk add netcat-openbsd curl bash
+
+RUN curl -L https://repo1.maven.org/maven2/org/apache/hive/hive-standalone-metastore/${METASTORE_VERSION}/hive-standalone-metastore-${METASTORE_VERSION}-bin.tar.gz | tar zxf - && \
+    curl -L https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar zxf - && \
+    wget https://jdbc.postgresql.org/download/postgresql-42.5.4.jar && \
+    mv postgresql-42.5.4.jar ${HIVE_HOME}/lib/
+
+COPY scripts/entrypoint.sh /entrypoint.sh
+
+RUN addgroup --system hive --gid=1000 && \
+    adduser --system --home ${HIVE_HOME} --ingroup hive --uid 1000 hive && \
+    chown hive:hive -R ${HIVE_HOME} && \
+    chown hive:hive /entrypoint.sh && chmod +x /entrypoint.sh
+
+USER hive
+EXPOSE 9083
 
 ENTRYPOINT ["sh", "-c", "/entrypoint.sh"]
