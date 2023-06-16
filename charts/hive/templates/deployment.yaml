@@ -38,8 +38,6 @@ spec:
               value: metastore
             - name: DB_DRIVER
               value: postgres
-            - name: HIVE_CUSTOM_CONF_DIR
-              value: /opt/hive/conf/
           ports:
             - name: tcp
               containerPort: 9083
