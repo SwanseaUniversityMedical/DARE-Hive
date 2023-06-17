@@ -56,7 +56,7 @@ jobs:
           docker run --rm -v /run/docker/docker.sock:/run/docker.sock goodwithtech/dockle:v0.4.11 image
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.11.2
         with:
           image-ref: 'image'
           format: 'table'
@@ -66,6 +66,8 @@ jobs:
           severity: 'CRITICAL,HIGH'
         env:
           DOCKLE_HOST: "unix:///run/docker/docker.sock"
+        volumes:
+          - /run/docker/docker.sock:/run/docker.sock 
 
       - name: registry login
         if: steps.container-changes.outputs.src == 'true'
