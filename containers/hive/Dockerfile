@@ -11,7 +11,7 @@ ENV HIVE_HOME=/opt/apache-hive-metastore-${METASTORE_VERSION}-bin
 RUN apk update && apk add --no-cache netcat-openbsd curl bash
 
 RUN curl -s -L https://repo1.maven.org/maven2/org/apache/hive/hive-standalone-metastore/${METASTORE_VERSION}/hive-standalone-metastore-${METASTORE_VERSION}-bin.tar.gz | tar zxf - && \
-    wget -q https://downloads.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar zxf - && \
+    curl -s -L https://downloads.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar zxf - && \
     wget -q https://jdbc.postgresql.org/download/postgresql-42.5.4.jar && \
     mv postgresql-42.5.4.jar ${HIVE_HOME}/lib/
 
