@@ -64,6 +64,8 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+        env:
+          DOCKLE_HOST: "unix:///run/docker/docker.sock"
 
       - name: registry login
         if: steps.container-changes.outputs.src == 'true'
