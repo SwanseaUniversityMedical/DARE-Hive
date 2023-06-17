@@ -15,7 +15,7 @@ RUN curl -L https://repo1.maven.org/maven2/org/apache/hive/hive-standalone-metas
     wget https://jdbc.postgresql.org/download/postgresql-42.5.4.jar && \
     mv postgresql-42.5.4.jar ${HIVE_HOME}/lib/
 
-COPY scripts/entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
 
 RUN addgroup --system hive --gid=1000 && \
     adduser --system --home ${HIVE_HOME} --ingroup hive --uid 1000 hive && \
