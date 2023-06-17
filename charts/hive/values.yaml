@@ -49,18 +49,19 @@ autoscaling:
 affinity: {}
 topologySpreadConstraints: []
 
-postgresql-ha:
-  enabled: true
+global:
   postgresql:
-    replicaCount: 1
-    auth:
-      username: postgres
-      password: j^i@PGy%3%8306
-      database: metastore_db
+    username: postgres
+    password: j^i@PGy%3%8306
+    database: metastore_db
     repmgrUsername: repmgr
     repmgrPassword: DpJCSdv3DY
     repmgrDatabase: repmgr
 
+postgresql-ha:
+  enabled: true
+  postgresql:
+    replicaCount: 1
 
 minio:
   accessKey: console
