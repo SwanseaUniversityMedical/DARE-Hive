@@ -55,19 +55,21 @@ jobs:
         run: |
           docker run --rm -v /run/docker/docker.sock:/run/docker.sock goodwithtech/dockle:v0.4.11 image
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.11.2
-        with:
-          image-ref: 'image'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-        env:
-          DOCKLE_HOST: "unix:///run/docker/docker.sock"
-        volumes:
-          - /run/docker/docker.sock:/run/docker.sock 
+      # - name: Run Trivy vulnerability scanner
+      #   uses: aquasecurity/trivy-action@0.11.2
+      #   with:
+      #     image-ref: 'image'
+      #     format: 'table'
+      #     exit-code: '1'
+      #     ignore-unfixed: true
+      #     vuln-type: 'os,library'
+      #     severity: 'CRITICAL,HIGH'
+      #   env:
+      #     DOCKLE_HOST: "unix:///run/docker/docker.sock"
+      - name: run trivy vulnerability scan
+        if: steps.container-changes.outputs.src == 'true'
+        run: |
+          docker run --rm -v /run/docker/docker.sock:/run/docker.sock aquasec/trivy:0.42.1 image --severity HIGH,CRITICAL --ignore-unfixed --format table --exit-code 1 --vuln-type os,library image 
 
       - name: registry login
         if: steps.container-changes.outputs.src == 'true'
