@@ -1,4 +1,4 @@
-FROM amazoncorretto:8u362-alpine3.17-jre
+FROM amazoncorretto:8u372-alpine3.17-jre
 
 WORKDIR /opt
 
@@ -8,7 +8,7 @@ ENV METASTORE_VERSION=3.1.3
 ENV HADOOP_HOME=/opt/hadoop-${HADOOP_VERSION}
 ENV HIVE_HOME=/opt/apache-hive-metastore-${METASTORE_VERSION}-bin
 
-RUN apk update && apk add --no-cache netcat-openbsd curl bash
+RUN apk update && apk upgrade && apk add --no-cache netcat-openbsd curl bash
 
 RUN curl -s -L https://repo1.maven.org/maven2/org/apache/hive/hive-standalone-metastore/${METASTORE_VERSION}/hive-standalone-metastore-${METASTORE_VERSION}-bin.tar.gz | tar zxf - && \
     curl -s -L https://downloads.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar zxf - && \
