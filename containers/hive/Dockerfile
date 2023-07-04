@@ -4,9 +4,11 @@ WORKDIR /opt
 
 ENV HADOOP_VERSION=3.3.4
 ENV METASTORE_VERSION=3.1.3
+ENV AWS_JAVA_BUNDLE_VERSION=1.12.262
 
 ENV HADOOP_HOME=/opt/hadoop-${HADOOP_VERSION}
 ENV HIVE_HOME=/opt/apache-hive-metastore-${METASTORE_VERSION}-bin
+ENV HADOOP_CLASSPATH=${HADOOP_HOME}/share/hadoop/tools/lib/aws-java-sdk-bundle-${AWS_JAVA_BUNDLE_VERSION}.jar:${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-aws-${HADOOP_VERSION}.jar
 
 RUN apk update && apk upgrade && apk add --no-cache netcat-openbsd curl bash
 

@@ -1,11 +1,11 @@
 apiVersion: v2
-appVersion: 1.0.4
+appVersion: 3.1.3
 
 dependencies:
 - name: postgresql-ha
   condition: postgresql-ha.enabled
   repository: https://charts.bitnami.com/bitnami
-  version: ~11.x.x
+  version: 11.7.6
 
 description: The Apache Hive ™ is a data warehouse software project built on top of
   Apache Hadoop for providing data query and analysis. Hive gives an SQL-like interface
@@ -15,4 +15,4 @@ icon: https://hive.apache.org/images/hive_logo_medium.jpg
 name: hive-metastore
 sources:
 - https://github.com/apache/hive
-version: 1.0.0
+version: 1.0.1
