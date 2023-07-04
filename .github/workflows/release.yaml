@@ -36,7 +36,7 @@ jobs:
               - '.github/workflows/release.yaml'
               - 'containers/hive/**'
 
-      - name: build container
+       - name: build container
         if: steps.container-changes.outputs.src == 'true'
         run: |
           docker build -t image -f "containers/hive/Dockerfile" .
@@ -51,10 +51,6 @@ jobs:
       #   run: |
       #     docker run --rm -v /run/docker/docker.sock:/run/docker.sock aquasec/trivy:0.42.1 image --severity HIGH,CRITICAL --ignore-unfixed --format table --exit-code 1 --vuln-type os,library image 
 
-      - name: registry login
-        if: steps.container-changes.outputs.src == 'true'
-        run: |
-          echo "$HARBOR_TOKEN" | docker login $HARBOR_REGISTRY -u $HARBOR_USER --password-stdin
 
       - name: generate token
         if: steps.container-changes.outputs.src == 'true'
