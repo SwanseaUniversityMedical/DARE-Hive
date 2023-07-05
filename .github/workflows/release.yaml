@@ -36,7 +36,7 @@ jobs:
               - '.github/workflows/release.yaml'
               - 'containers/hive/**'
 
-       - name: build container
+      - name: build container
         if: steps.container-changes.outputs.src == 'true'
         run: |
           docker build -t image -f "containers/hive/Dockerfile" .
