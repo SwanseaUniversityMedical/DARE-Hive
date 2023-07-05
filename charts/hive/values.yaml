@@ -3,10 +3,10 @@
 ## https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+Administration
 replicaCount: 1
 
-## Default Hive image and tag. Please build image locally before applying this.
+## Default Hive image and tag.
 image:
-  name: alleeex/hive-metastore
-  tag: 3.1.3
+  name: harbor.ukserp.ac.uk/dare/hive
+  tag: 1.1.0
   pullPolicy: IfNotPresent
 
 ## Resource requests and limits: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
@@ -36,6 +36,7 @@ service:
   port: 9083
 
 ## Auto-scaling (hpa) configuration
+# TODO: not implemented
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -47,17 +48,19 @@ autoscaling:
 affinity: {}
 topologySpreadConstraints: []
 
+global:
+  postgresql:
+    username: postgres
+    password: #replace with a password of your choice
+    database: metastore_db
+    repmgrUsername: repmgr
+    repmgrPassword: #replace with a password of your choice
+    repmgrDatabase: repmgr
+
 postgresql-ha:
   enabled: true
   postgresql:
     replicaCount: 1
-    username: postgres
-    password: j^i@PGy%3%8306
-    database: metastore_db
-    repmgrUsername: repmgr
-    repmgrPassword: DpJCSdv3DY
-    repmgrDatabase: repmgr
-
 
 minio:
   accessKey: console

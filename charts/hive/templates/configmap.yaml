@@ -37,11 +37,11 @@ data:
         </property>
         <property>
             <name>javax.jdo.option.ConnectionUserName</name>
-            <value>{{ index .Values "postgresql-ha.postgresql.username" }}</value>
+            <value>{{ .Values.global.postgresql.username }}</value>
         </property>
         <property>
             <name>javax.jdo.option.ConnectionPassword</name>
-            <value>{{ index .Values "postgresql-ha.postgresql.password" }}</value>
+            <value>{{ .Values.global.postgresql.password }}</value>
         </property>
         <property>
             <name>fs.s3a.access.key</name>
