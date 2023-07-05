@@ -36,6 +36,11 @@ jobs:
               - '.github/workflows/release.yaml'
               - 'containers/hive/**'
 
+      - name: registry login
+        if: steps.container-changes.outputs.src == 'true'
+        run: |
+          echo "$HARBOR_TOKEN" | docker login $HARBOR_REGISTRY -u $HARBOR_USER --password-stdin
+          
       - name: build container
         if: steps.container-changes.outputs.src == 'true'
         run: |
