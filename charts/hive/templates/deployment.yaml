@@ -21,6 +21,12 @@ spec:
         app.kubernetes.io/name: {{ include "hiveMetastore.fullname" . }}
         app.kubernetes.io/component: metastore
         app.kubernetes.io/instance: {{ .Release.Name | quote }}
+      {{- if .Values.annotations }}
+      annotations:
+        {{- with .Values.annotations }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
+      {{- end }}
     spec:
       {{- if .Values.affinity }}
       affinity:
@@ -32,15 +38,16 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{.Values.image.name}}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          {{- with .Values.overrideCommand }}
+          {{- . | toYaml | nindent 10 }}
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: METASTORE_DB_HOSTNAME
-              # have to use the 'index' method due to this bug https://github.com/helm/helm/issues/2192
-              {{- if index .Values "postgresql-ha.overrideAddress" }}
-              value: {{ index .Values "postgresql-ha.overrideAddress" }}
-              {{- else }}
-              value: {{ .Release.Name }}-postgresql-ha-pgpool
-              {{- end }}
+              value: {{ .Release.Name }}-mysql-primary-headless
+            {{- with .Values.env }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
           ports:
             - name: tcp
               containerPort: 9083
@@ -55,4 +62,8 @@ spec:
       - name: hive-conf-templates
         configMap:
           name: {{ .Release.Name }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 {{- end }}

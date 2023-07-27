@@ -14,8 +14,8 @@ RUN apk update && apk upgrade && apk add --no-cache netcat-openbsd curl bash
 
 RUN curl -s -L https://repo1.maven.org/maven2/org/apache/hive/hive-standalone-metastore/${METASTORE_VERSION}/hive-standalone-metastore-${METASTORE_VERSION}-bin.tar.gz | tar zxf - && \
     curl -s -L https://downloads.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar zxf - && \
-    wget -q https://jdbc.postgresql.org/download/postgresql-42.5.4.jar && \
-    mv postgresql-42.5.4.jar ${HIVE_HOME}/lib/
+    curl -L https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-8.1.0.tar.gz | tar zxf - && \
+    mv mysql-connector-j-8.1.0/mysql-connector-j-8.1.0.jar ${HIVE_HOME}/lib/mysql-connector-java.jar
 
 COPY ./containers/hive/entrypoint.sh /entrypoint.sh
 

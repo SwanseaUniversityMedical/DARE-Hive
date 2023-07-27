@@ -48,22 +48,48 @@ autoscaling:
 affinity: {}
 topologySpreadConstraints: []
 
-global:
-  postgresql:
-    username: postgres
-    password: #replace with a password of your choice
+mysql:
+  architecture: replication
+  auth:
+    rootPassword: 'P4ssW0rd!1'
+    createDatabase: true
     database: metastore_db
-    repmgrUsername: repmgr
-    repmgrPassword: #replace with a password of your choice
-    repmgrDatabase: repmgr
+    username: hive
+    password: 'H1v3P4ssW0rd!1'
+    replicationPassword: 'R3pl1c4t1onP4ssW0rd!1'
 
-postgresql-ha:
-  enabled: true
-  postgresql:
-    replicaCount: 1
+  secondary:
+    replicaCount: 2
+
+  metrics:
+    enabled: false
 
 minio:
   accessKey: console
   secretKey: console123
   endpoint: http://minio
 
+# so we're not putting sensitive keys in plain text, you can inject env var references by
+# 
+# minio:
+#   accessKey: ${env.s3_access_key}
+#   secretKey: ${env.s3_secret_key}
+# 
+# you'll need some sidecar or init container to inject the sensitive variables (e.g. vault agent injector)
+# and will also need to override the entrypoint to source your env vars.
+# 
+# see below for an example
+# overrideCommand: 
+#   command: ['sh', '-c']
+#   args: ['source /vault/secrets/minio.env && /entrypoint.sh']
+
+# example vault agent injector annotations
+# annotations:
+#   vault.hashicorp.com/agent-inject: 'true'
+#   vault.hashicorp.com/role: 'your vault role here'
+#   vault.hashicorp.com/agent-inject-secret-minio.env: 'path/to/secret/to/inject'
+#   vault.hashicorp.com/agent-inject-template-minio.env: |
+#     {{ with secret "path/to/secret/to/inject" -}}
+#     export s3_access_key="{{ .Data.data.access_key }}"
+#     export s3_secret_key="{{ .Data.data.secret_key }}"
+#     {{- end }}
