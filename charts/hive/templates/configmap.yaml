@@ -25,23 +25,19 @@ data:
         </property>
         <property>
             <name>javax.jdo.option.ConnectionDriverName</name>
-            <value>org.postgresql.Driver</value>
+            <value>com.mysql.cj.jdbc.Driver</value>
         </property>
         <property>
             <name>javax.jdo.option.ConnectionURL</name>
-            {{- if index .Values "postgresql-ha.overrideAddress" }}
-            <value>jdbc:postgresql://{{ index .Values "postgresql-ha.overrideAddress" }}:5432/{{ index .Values "postgresql-ha.postgresql.database" }}</value>
-            {{- else }}
-            <value>jdbc:postgresql://{{ .Release.Name }}-postgresql-ha-pgpool:5432/{{ index .Values "postgresql-ha.postgresql.database" }}</value>
-            {{- end }}
+            <value>jdbc:mysql://{{ .Release.Name }}-mysql-primary-headless:3306/{{ .Values.mysql.auth.database }}</value>
         </property>
         <property>
             <name>javax.jdo.option.ConnectionUserName</name>
-            <value>{{ .Values.global.postgresql.username }}</value>
+            <value>{{ .Values.mysql.auth.username }}</value>
         </property>
         <property>
             <name>javax.jdo.option.ConnectionPassword</name>
-            <value>{{ .Values.global.postgresql.password }}</value>
+            <value>{{ .Values.mysql.auth.password }}</value>
         </property>
         <property>
             <name>fs.s3a.access.key</name>

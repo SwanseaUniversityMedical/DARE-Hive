@@ -2,14 +2,14 @@
 
 export METASTORE_DB_HOSTNAME=${METASTORE_DB_HOSTNAME:-localhost}
 
-echo "Waiting for database on ${METASTORE_DB_HOSTNAME} to launch on 5432 ..."
+echo "Waiting for database on ${METASTORE_DB_HOSTNAME} to launch on 3306 ..."
 
-while ! nc -z ${METASTORE_DB_HOSTNAME} 5432; do
+while ! nc -z ${METASTORE_DB_HOSTNAME} 3306; do
   sleep 1
 done
 
-echo "Database on ${METASTORE_DB_HOSTNAME}:5432 started"
-echo "Init apache hive metastore on ${METASTORE_DB_HOSTNAME}:5432"
+echo "Database on ${METASTORE_DB_HOSTNAME}:3306 started"
+echo "Init apache hive metastore on ${METASTORE_DB_HOSTNAME}:3306"
 
-/opt/apache-hive-metastore-3.1.3-bin/bin/schematool -initSchema -dbType postgres
+/opt/apache-hive-metastore-3.1.3-bin/bin/schematool -initSchema -dbType mysql
 /opt/apache-hive-metastore-3.1.3-bin/bin/start-metastore
