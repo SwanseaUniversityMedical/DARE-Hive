@@ -268,6 +268,7 @@ jobs:
         if: steps.chart-changes.outputs.src == 'true' && steps.semantic-dry.outputs.new-release-published == 'true'
         run: |
           set -x
+          helm dependency update ./charts/$HARBOR_REPO/Chart.yaml
           helm package ./charts/$HARBOR_REPO -d . --version $TAG --app-version $TAG
           tar -xzf $(echo *.tgz) -C ./charts $HARBOR_REPO/Chart.yaml
         env:
