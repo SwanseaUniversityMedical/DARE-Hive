@@ -25,7 +25,7 @@ jobs:
       slack-thread: ${{ needs.slack.outputs.thread }}
       github-app-id: ${{ vars.APP_ID }}
       filters: |
-        container:
+        hive-container:
           - './.github/workflows/on-pr-update.yaml'
           - 'containers/hive/**'
         chart:
@@ -36,12 +36,12 @@ jobs:
       slack-token: ${{ secrets.SLACK_TOKEN }}
       github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-  build-container:
+  hive-container:
     # Build the container and push it as :pr-42 and :pr-42-fe45b3h
     needs:
       - slack
       - changes
-    if: fromJSON(needs.changes.outputs.changes).container == 'true'
+    if: fromJSON(needs.changes.outputs.changes).hive-container == 'true'
     uses: SwanseaUniversityMedical/workflows/.github/workflows/on-pr-update-container.yaml@v1.0.0
     with:
       job-name: hive-container
@@ -62,7 +62,7 @@ jobs:
       slack-token: ${{ secrets.SLACK_TOKEN }}
 
 
-  build-pr-chart:
+  chart:
     # Build the chart and push it as :pr-42 and :pr-42-fe45b3h
     needs:
       - slack
@@ -92,8 +92,8 @@ jobs:
     needs:
       - slack
       - changes
-      - build-container
-      - build-pr-chart
+      - hive-container
+      - chart
     uses: SwanseaUniversityMedical/workflows/.github/workflows/slack-pr-thread.yaml@v1.0.0
     if: always()
     with:
