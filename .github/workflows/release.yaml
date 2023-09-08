@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - refactor/patch-release-ci-to-remove-tests-if-they-dont-have-them
 
 jobs:
 
@@ -57,11 +58,12 @@ jobs:
       container-registry-user: ${{ vars.HARBOR_USER }}
       container-registry-project: ${{ vars.HARBOR_PROJECT }}
       container-registry-repo: ${{ vars.HARBOR_REPO }}
-      release-tag-format: 'DARE-Hive-Container-${version}'
+      release-tag-format: 'TEST-DARE-Hive-Container-${version}'
       slack-channel: ${{ vars.SLACK_CHANNEL }}
       slack-thread: ${{ needs.slack.outputs.thread }}
       build-command: |
         docker build -t $IMAGE -f containers/hive/Dockerfile .
+      release-branches: refactor/patch-release-ci-to-remove-tests-if-they-dont-have-them
     secrets:
       container-registry-token: ${{ secrets.HARBOR_TOKEN }}
       slack-token: ${{ secrets.SLACK_TOKEN }}
@@ -85,13 +87,14 @@ jobs:
       chart-registry-user: ${{ vars.HARBOR_USER }}
       chart-registry-project: ${{ vars.HARBOR_PROJECT }}
       chart-registry-repo: ${{ vars.HARBOR_REPO }}
-      release-tag-format: 'DARE-Hive-Helm-${version}'
+      release-tag-format: 'TEST-DARE-Hive-Helm-${version}'
       github-app-id: ${{ vars.APP_ID }}
       slack-channel: ${{ vars.SLACK_CHANNEL }}
       slack-thread: ${{ needs.slack.outputs.thread }}
       chart: charts/**
       test-command: |
         helm template $CHART --values charts/hive/values.yaml
+      release-branches: refactor/patch-release-ci-to-remove-tests-if-they-dont-have-them
     secrets:
       chart-registry-token: ${{ secrets.HARBOR_TOKEN }}
       github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
