@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - refactor/patch-pr-and-release-ci-to-remove-tests-if-they-dont-have-them
+      - refactor/patch-release-ci-to-remove-tests-if-they-dont-have-them
 
 jobs:
 
@@ -63,7 +63,7 @@ jobs:
       slack-thread: ${{ needs.slack.outputs.thread }}
       build-command: |
         docker build -t $IMAGE -f containers/hive/Dockerfile .
-      release-branches: refactor/patch-pr-and-release-ci-to-remove-tests-if-they-dont-have-them
+      release-branches: refactor/patch-release-ci-to-remove-tests-if-they-dont-have-them
     secrets:
       container-registry-token: ${{ secrets.HARBOR_TOKEN }}
       slack-token: ${{ secrets.SLACK_TOKEN }}
@@ -94,7 +94,7 @@ jobs:
       chart: charts/**
       test-command: |
         helm template $CHART --values charts/hive/values.yaml
-      release-branches: refactor/patch-pr-and-release-ci-to-remove-tests-if-they-dont-have-them
+      release-branches: refactor/patch-release-ci-to-remove-tests-if-they-dont-have-them
     secrets:
       chart-registry-token: ${{ secrets.HARBOR_TOKEN }}
       github-app-private-key: ${{ secrets.APP_PRIVATE_KEY }}
