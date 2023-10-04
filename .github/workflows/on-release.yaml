@@ -33,10 +33,10 @@ jobs:
       github-app-id: ${{ vars.APP_ID }}
       filters: |
         hive-container:
-          - './.github/workflows/release.yaml'
+          - './.github/workflows/on-release.yaml'
           - 'containers/hive/**'
         chart:
-          - './.github/workflows/release.yaml'
+          - './.github/workflows/on-release.yaml'
           - 'charts/**'
 
     secrets:
