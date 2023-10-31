@@ -44,7 +44,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: METASTORE_DB_HOSTNAME
-              value: {{ .Release.Name }}-mysql-primary-headless
+              value: {{ .Release.Name }}-{{ .Values.metastoreHostname }}
             {{- with .Values.env }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
