@@ -5,7 +5,7 @@ replicaCount: 1
 
 ## Default Hive image and tag.
 image:
-  name: harbor.ukserp.ac.uk/dare/hive
+  repository: harbor.ukserp.ac.uk/dare/hive
   tag: 1.1.0
   pullPolicy: IfNotPresent
 
