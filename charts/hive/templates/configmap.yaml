@@ -29,7 +29,7 @@ data:
         </property>
         <property>
             <name>javax.jdo.option.ConnectionURL</name>
-            <value>jdbc:mysql://{{ .Release.Name }}-mysql-primary-headless:3306/{{ .Values.mysql.auth.database }}</value>
+            <value>jdbc:mysql://{{ .Release.Name }}-{{ .Values.metastoreHostname }}:3306/{{ .Values.mysql.auth.database }}</value>
         </property>
         <property>
             <name>javax.jdo.option.ConnectionUserName</name>
