@@ -36,7 +36,13 @@ service:
   port: 9083
 
 # the release name will be appended to the start of this
-metastoreHostname: "mysql-primary-headless"
+metastoreDb:
+  hostname: "mysql-primary-headless"
+  port: 3306
+  database: metastore_db
+  auth:
+    username: ""
+    password: ""
 
 ## Auto-scaling (hpa) configuration
 # TODO: not implemented
@@ -52,6 +58,7 @@ affinity: {}
 topologySpreadConstraints: []
 
 mysql:
+  enabled: true
   architecture: replication
   auth:
     rootPassword: 'P4ssW0rd!1'
