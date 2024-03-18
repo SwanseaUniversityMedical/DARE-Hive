@@ -6,7 +6,7 @@ replicaCount: 1
 ## Default Hive image and tag.
 image:
   repository: harbor.ukserp.ac.uk/dare/hive
-  tag: 1.5.6
+  tag: 1.6.0
   pullPolicy: IfNotPresent
 
 ## Resource requests and limits: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
