@@ -4,7 +4,7 @@ WORKDIR /opt
 
 ENV HADOOP_VERSION=3.3.6
 ENV METASTORE_VERSION=3.1.3
-ENV AWS_JAVA_BUNDLE_VERSION=1.12.262
+ENV AWS_JAVA_BUNDLE_VERSION=1.12.367
 
 ENV HADOOP_HOME=/opt/hadoop-${HADOOP_VERSION}
 ENV HIVE_HOME=/opt/apache-hive-metastore-${METASTORE_VERSION}-bin
@@ -16,6 +16,10 @@ RUN curl -s -L https://repo1.maven.org/maven2/org/apache/hive/hive-standalone-me
     curl -s -L https://downloads.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar zxf - && \
     curl -L https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-8.1.0.tar.gz | tar zxf - && \
     mv mysql-connector-j-8.1.0/mysql-connector-j-8.1.0.jar ${HIVE_HOME}/lib/mysql-connector-java.jar
+
+# Postgres driver
+RUN wget -q https://jdbc.postgresql.org/download/postgresql-42.5.4.jar && \
+    mv postgresql-42.5.4.jar ${HIVE_HOME}/lib/
 
 COPY ./containers/hive/entrypoint.sh /entrypoint.sh
 

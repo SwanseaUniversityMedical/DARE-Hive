@@ -43,8 +43,19 @@ spec:
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{- if .Values.mysql.enabled }}
             - name: METASTORE_DB_HOSTNAME
-              value: {{ .Release.Name }}-{{ .Values.metastoreHostname }}
+              value: {{ .Release.Name }}-{{ .Values.metastoreDb.hostname }}
+            - name: METASTORE_DB_TYPE
+              value: "mysql"
+            {{- else }}
+            - name: METASTORE_DB_HOSTNAME
+              value: {{ .Values.metastoreDb.hostname }}
+            - name: METASTORE_DB_TYPE
+              value: "postgres"
+            {{- end }}
+            - name: METASTORE_DB_PORT
+              value: {{ .Values.metastoreDb.port }}
             {{- with .Values.env }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
