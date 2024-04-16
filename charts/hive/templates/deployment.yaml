@@ -55,7 +55,7 @@ spec:
               value: "postgres"
             {{- end }}
             - name: METASTORE_DB_PORT
-              value: {{ .Values.metastoreDb.port }}
+              value: "{{ .Values.metastoreDb.port }}"
             {{- with .Values.env }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}

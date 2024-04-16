@@ -61,12 +61,12 @@ mysql:
   enabled: true
   architecture: replication
   auth:
-    rootPassword: 'P4ssW0rd!1'
+    # rootPassword: 'P4ssW0rd!1'
     createDatabase: true
     database: metastore_db
     username: hive
     password: 'H1v3P4ssW0rd!1'
-    replicationPassword: 'R3pl1c4t1onP4ssW0rd!1'
+    # replicationPassword: 'R3pl1c4t1onP4ssW0rd!1'
 
   secondary:
     replicaCount: 2
