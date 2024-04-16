@@ -38,12 +38,22 @@ spec:
           image: "{{.Values.image.repository}}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{- if .Values.mysql.enabled }}
             - name: METASTORE_DB_HOSTNAME
-              {{- if index .Values "postgresql-ha.overrideAddress" }}
-              value: {{ index .Values "postgresql-ha.overrideAddress" }}
-              {{- else }}
-              value: {{ .Release.Name }}-postgresql-ha-pgpool
-              {{- end }}
+              value: {{ .Release.Name }}-{{ .Values.metastoreDb.hostname }}
+            - name: METASTORE_DB_TYPE
+              value: "mysql"
+            {{- else }}
+            - name: METASTORE_DB_HOSTNAME
+              value: {{ .Values.metastoreDb.hostname }}
+            - name: METASTORE_DB_TYPE
+              value: "postgres"
+            {{- end }}
+            - name: METASTORE_DB_PORT
+              value: "{{ .Values.metastoreDb.port }}"
+            {{- with .Values.env }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
           ports:
             - name: tcp
               containerPort: 9083
